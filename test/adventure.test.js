@@ -14,7 +14,7 @@ function walkTo(world, target) {
 }
 
 function goToWarehouse(world) {
-  walkTo(world, world.map.places['公共仓库']);
+  walkTo(world, world.map.places['公共箱子']);
 }
 
 test('走出住所，NPC 同步移动并在抵达工作地点后生产', () => {

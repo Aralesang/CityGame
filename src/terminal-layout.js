@@ -1,4 +1,5 @@
 import { observe } from './simulation/adventure.js';
+import { itemRows } from './controls.js';
 
 const activityNames = { work: '工作', sleep: '睡觉', leisure: '闲暇', rest: '休息' };
 // 当前界面只包含 ASCII、中文和框线；框线必须按一列计算。
@@ -29,12 +30,13 @@ function wrap(text, width) {
   return lines;
 }
 
-export function layout(world, messages, columns, rows) {
+export function layout(world, messages, columns, rows, ui = {}) {
   const width = Math.max(1, columns - 1); // 留一列，避免终端自动换行。
   if (width < 63 || rows < 26) {
     return ['窗口过小，请放大到至少 64 列 × 26 行。',
       `当前 ${columns} 列 × ${rows} 行；Q / Esc 退出。`].slice(0, rows).map(line => fit(line, width));
   }
+  if (ui.menu) return inventoryLayout(world, messages, width, rows, ui);
   const view = observe(world);
   const player = world.player;
   const leftWidth = Math.max(29, Math.floor(width * 0.48));
@@ -56,8 +58,8 @@ export function layout(world, messages, columns, rows) {
     left[top + index] = content(' '.repeat(padding) + line, leftWidth);
   }
   left[rows - 6] = border(leftWidth, '图例');
-  (view.indoors ? ['@ 你  N 居民  b 床铺', 'D 出口（走上去离开）', 't 桌子  c 椅子（阻挡）', '# 墙壁  . 地板'] :
-    ['@ 你  N 居民  H 家门', 'h 民居门（走上去进入）', 'S 仓库 F 农田 B 面包坊', 'W 水井 ^ 野外 # 边界']).forEach((line, index) => {
+  (view.indoors ? ['@ 你  N 居民  b 床铺', 'D 出口（走上去离开）', 't 桌 c 椅 ! 可拾取物', '# 墙壁  . 地板'] :
+    ['@ 你  N 居民  H 家门', 'h 民居门（走上去进入）', 'C 箱子 F 农田 B 面包坊', 'W 水井 ^ 野外 ! 物品']).forEach((line, index) => {
     left[rows - 5 + index] = content(line, leftWidth);
   });
   left[rows - 1] = '└' + '─'.repeat(leftWidth - 2) + '┘';
@@ -74,8 +76,8 @@ export function layout(world, messages, columns, rows) {
     ]],
     ['背包与公共物资', [
       `背包：面包 ${player.inventory.bread}  水 ${player.inventory.water}`,
-      `仓库面包 ${world.market.bread.stock} / ${world.market.bread.price}币`,
-      `仓库饮水 ${world.market.water.stock} / ${world.market.water.price}币`,
+      `箱子面包 ${world.market.bread.stock} / ${world.market.bread.price}币`,
+      `箱子饮水 ${world.market.water.stock} / ${world.market.water.price}币`,
     ]],
     ['附近居民', Array.from({ length: 3 }, (_, index) => {
       const npc = view.nearby[index];
@@ -83,10 +85,10 @@ export function layout(world, messages, columns, rows) {
         : index === 0 ? '附近没有居民' : '';
     })],
     ['操作提示', [
-      '方向键/WASD 移动  空格 等待',
-      'E/R 取面包/水  1/2 吃/喝',
-      'Z 在自家床上睡觉 Q/Esc 退出',
-      '行动耗时1小时，停下时暂停',
+      '方向键 移动  Z 交互',
+      '床上Z睡觉  ! 上Z拾取',
+      'C 上Z打开箱子 空地Z背包',
+      'Esc关闭界面  Q退出',
     ]],
   ];
   const right = [];
@@ -100,4 +102,36 @@ export function layout(world, messages, columns, rows) {
   for (let index = 0; index < available; index++) right.push(content(logLines[index] || '', rightWidth));
   right.push('└' + '─'.repeat(rightWidth - 2) + '┘');
   return left.map((line, index) => line + ' ' + right[index]);
+}
+
+function inventoryLayout(world, messages, width, rows, ui) {
+  const leftWidth = Math.floor((width - 1) / 2);
+  const rightWidth = width - leftWidth - 1;
+  const active = ui.side;
+  const bodyRows = rows - 9;
+  const panel = (side, size, title) => {
+    const selected = ui.indices[side];
+    const items = itemRows(world, side);
+    const offset = Math.max(0, selected - bodyRows + 1);
+    const label = ' ' + (active === side ? '> ' : '  ') + title + ' ';
+    const result = ['┌' + label + '─'.repeat(size - 2 - displayWidth(label)) + '┐'];
+    for (let index = 0; index < bodyRows; index++) {
+      const item = items[offset + index];
+      const text = item ? (active === side && offset + index === selected ? '> ' : '  ') + item.name + ' ×' + item.quantity : index === 0 && !items.length ? '（空）' : '';
+      result.push('│ ' + fit(text, size - 4) + ' │');
+    }
+    result.push('└' + '─'.repeat(size - 2) + '┘');
+    return result;
+  };
+  const left = panel('chest', leftWidth, ui.menu === 'chest' ? '箱子' : '物品说明');
+  if (ui.menu === 'backpack') for (let index = 1; index < left.length - 1; index++) left[index] = '│ ' + fit(index === 1 ? '选择背包物品，按 Z 使用。' : '', leftWidth - 4) + ' │';
+  const right = panel('backpack', rightWidth, '你的背包');
+  const lines = [fit(ui.menu === 'chest' ? '公共箱子 · 双向存取（每次一份）' : '背包 · 使用物品', width),
+    fit('第 ' + world.time.day + ' 天 ' + String(world.time.hour).padStart(2, '0') + ':00  浏览不耗时，实际操作耗时一小时', width),
+    fit('', width), ...left.map((line, index) => line + ' ' + right[index]),
+    fit(ui.menu === 'chest' ? '←/→ 切换箱子与背包  ↑/↓ 选择  Z 拿取/存入' : '↑/↓ 选择  Z 使用', width),
+    fit('Esc 返回地图  Q 退出游戏', width),
+    fit(messages.at(-1) || '', width)];
+  while (lines.length < rows) lines.push(fit('', width));
+  return lines.slice(0, rows);
 }

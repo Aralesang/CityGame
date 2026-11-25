@@ -13,7 +13,7 @@ export function createMap() {
     ],
     places: {
       '你的住所': { x: 2, y: 2, symbol: 'H' },
-      '公共仓库': { x: 4, y: 2, symbol: 'S' },
+      '公共箱子': { x: 4, y: 2, symbol: 'C' },
       '农田': { x: 6, y: 2, symbol: 'F' },
       '面包坊': { x: 4, y: 4, symbol: 'B' },
       '水井': { x: 6, y: 4, symbol: 'W' },

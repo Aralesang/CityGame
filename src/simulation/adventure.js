@@ -8,6 +8,8 @@ export function createAdventure() {
   for (const npc of world.npcs) npc.position = { ...world.map.places[npc.home] };
   world.player = { id: 'player', name: '旅人', position: { ...world.map.places['你的住所'] },
     inventory: { bread: 0, water: 0 }, needs: { hunger: 0, thirst: 0, fatigue: 0 }, activity: 'leisure' };
+  world.chest = { id: 'public-chest', name: '公共箱子', position: { ...world.map.places['公共箱子'] }, items: world.market };
+  world.groundItems = [{ id: 'starter-bread', good: 'bread', quantity: 1, position: { x: 1, y: 4, mapId: 'home:你的住所' } }];
   world.history = [];
   advanceHours(world, 7);
   return world;
@@ -18,7 +20,35 @@ export function act(world, action) {
   const player = world.player;
   let hours = 1;
   let message;
-  if (action.type === 'move') {
+  if (action.type === 'interact') {
+    if (samePosition(player.position, world.chest.position)) return { ok: true, menu: 'chest', message: '打开箱子。', reports: [] };
+    const item = world.groundItems.find(item => item.quantity > 0 && samePosition(item.position, player.position));
+    if (item) return act(world, { type: 'pickup', itemId: item.id });
+    if (actorMap(world.map, player.position).rows[player.position.y][player.position.x] === 'b') return act(world, { type: 'sleep' });
+    return { ok: true, menu: 'backpack', message: '打开背包。', reports: [] };
+  } else if (action.type === 'pickup') {
+    const item = world.groundItems.find(item => item.id === action.itemId && item.quantity > 0 && samePosition(item.position, player.position));
+    if (!item) return { ok: false, message: '脚下没有可拾取的物品。', reports: [] };
+    player.inventory[item.good] = (player.inventory[item.good] || 0) + item.quantity;
+    message = '拾起了 ' + item.quantity + ' 份' + world.market[item.good].name + '。';
+    item.quantity = 0;
+  } else if (action.type === 'transfer') {
+    if (!samePosition(player.position, world.chest.position)) return { ok: false, message: '请站在箱子上操作。', reports: [] };
+    const item = Object.hasOwn(world.chest.items, action.good) ? world.chest.items[action.good] : null;
+    if (!item || !['take', 'deposit'].includes(action.direction)) return { ok: false, message: '无效的物品转移。', reports: [] };
+    const carried = player.inventory[action.good] || 0;
+    if (action.direction === 'take') {
+      if (item.stock < 1) return { ok: false, message: '箱子里没有这件物品。', reports: [] };
+      item.stock--;
+      player.inventory[action.good] = carried + 1;
+      message = '从箱子拿取一份' + item.name + '。';
+    } else {
+      if (carried < 1) return { ok: false, message: '背包里没有这件物品。', reports: [] };
+      player.inventory[action.good]--;
+      item.stock++;
+      message = '向箱子存入一份' + item.name + '。';
+    }
+  } else if (action.type === 'move') {
     const previousRegion = regionId(player.position);
     const direction = { n: [0, -1], s: [0, 1], w: [-1, 0], e: [1, 0] }[action.direction];
     if (!direction || !moveActor(player, ...direction, world.map)) return { ok: false, message: '无法向那里移动。', reports: [] };
@@ -26,11 +56,7 @@ export function act(world, action) {
     if (previousRegion !== regionId(player.position)) message = regionId(player.position) === 'town'
       ? '你走出房门，回到了小镇。' : `你进入了${actorMap(world.map, player.position).name}。`;
   } else if (action.type === 'take') {
-    if (!samePosition(player.position, world.map.places['公共仓库'])) return { ok: false, message: '请先走到公共仓库 S。', reports: [] };
-    if (!['bread', 'water'].includes(action.good) || world.market[action.good].stock < 1) return { ok: false, message: '没有可取用的这类物资。', reports: [] };
-    world.market[action.good].stock--;
-    player.inventory[action.good]++;
-    message = `你从公共仓库取走一份${world.market[action.good].name}，公共库存减少了。`;
+    return act(world, { type: 'transfer', direction: 'take', good: action.good });
   } else if (action.type === 'use') {
     if (!consume(player, action.good)) return { ok: false, message: '背包中没有这种可用物资。', reports: [] };
     message = `你使用了一份${world.market[action.good].name}。`;
@@ -59,6 +85,7 @@ export function observe(world) {
     if (regionId(place) === currentRegion) rows[place.y][place.x] = place.symbol;
   }
   if (currentRegion === 'town') for (const door of world.map.entrances) rows[door.y][door.x] = door.symbol;
+  for (const item of world.groundItems) if (item.quantity > 0 && regionId(item.position) === currentRegion) rows[item.position.y][item.position.x] = '!';
   for (const npc of world.npcs) if (regionId(npc.position) === currentRegion) rows[npc.position.y][npc.position.x] = 'N';
   rows[world.player.position.y][world.player.position.x] = '@';
   return {
