@@ -1,0 +1,8 @@
+{
+  "name": "autonomous-town-rpg",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node src/cli.js", "simulate": "node src/simulate.js", "test": "node --test" },
+  "engines": { "node": ">=22" }
+}
