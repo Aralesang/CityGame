@@ -5,7 +5,9 @@ import { createWorld, advanceHours, snapshot } from '../src/simulation/world.js'
 test('日程按小时推进，价格仅在午夜结算', () => {
   const world = createWorld();
   advanceHours(world, 8);
-  assert.equal(world.npcs.find(n => n.id === 'mai').activity, 'work');
+  const baker = world.npcs.find(n => n.id === 'mai');
+  assert.ok(baker);
+  assert.equal(baker.activity, 'work');
   advanceHours(world, 15);
   assert.equal(world.lastReport, null);
   assert.equal(world.market.bread.price, 4);

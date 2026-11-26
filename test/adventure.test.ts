@@ -1,9 +1,10 @@
+import type { AdventureWorld, Position } from '../src/types.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createAdventure, act, observe } from '../src/simulation/adventure.js';
 import { nextStep, samePosition, regionId } from '../src/simulation/actors.js';
 
-function walkTo(world, target) {
+function walkTo(world: AdventureWorld, target: Position) {
   for (let count = 0; !samePosition(world.player.position, target); count++) {
     assert.ok(count < 100, '目标必须可达');
     const step = nextStep(world.map, world.player.position, target);
@@ -13,7 +14,7 @@ function walkTo(world, target) {
   }
 }
 
-function goToWarehouse(world) {
+function goToWarehouse(world: AdventureWorld) {
   walkTo(world, world.map.places['公共箱子']);
 }
 
@@ -21,6 +22,7 @@ test('走出住所，NPC 同步移动并在抵达工作地点后生产', () => {
   const world = createAdventure();
   assert.deepEqual(world.time, { day: 1, hour: 7 });
   const farmer = world.npcs.find(npc => npc.id === 'lin');
+  assert.ok(farmer);
   const before = { ...farmer.position };
   act(world, { type: 'move', direction: 'e' });
   assert.deepEqual(world.player.position, { x: 3, y: 4, mapId: 'home:你的住所' });
@@ -68,6 +70,7 @@ test('玩家取走物资影响次日库存和价格', () => {
   for (const world of [taken, baseline]) act(world, { type: 'wait', hours: 24 - world.time.hour });
   assert.equal(taken.market.bread.stock, baseline.market.bread.stock - 1);
   assert.ok(taken.market.bread.price > baseline.market.bread.price);
+  assert.ok(taken.lastReport);
   assert.equal(taken.lastReport.day, 1);
 });
 

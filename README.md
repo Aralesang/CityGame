@@ -4,7 +4,7 @@
 
 ## 开始冒险
 
-运行 `npm start`，方向键移动，Z 是唯一交互键，无需回车。Q 退出游戏；Esc 关闭物品界面，在地图上按 Esc 则退出。暂不保存。
+首次运行先执行 `npm install` 安装开发依赖，再运行 `npm start`，方向键移动，Z 是唯一交互键，无需回车。Q 退出游戏；Esc 关闭物品界面，在地图上按 Esc 则退出。暂不保存。
 
 - 自家床铺 b 上按 Z：睡到下一次早晨六点；其他人的床不能睡。
 - 地面物品 ! 上按 Z：拾取整堆物品到背包。开局床左侧有一份面包可试用。
@@ -25,7 +25,18 @@
 
 ## 原有批量模拟
 
-Node.js >=22，原生 JavaScript ES modules，无外部依赖，无画面引擎。
+Node.js >=22，使用 TypeScript 严格模式与 ES modules，无画面引擎、无运行时第三方依赖。
+
+源码和测试均以 `.ts` 维护，`tsc` 编译到 `dist/`，然后由 Node.js 执行。`npm start`、`npm run simulate`、`npm test` 都会先构建；不要直接运行源码目录里的 `.js` 路径。
+
+```sh
+npm install
+npm run typecheck  # 仅严格类型检查，不输出文件
+npm run build      # 编译源码与测试，输出到 dist/
+npm start          # 启动终端游戏
+```
+
+`dist/` 和 `node_modules/` 已加入 Git 忽略；`package-lock.json` 固定开发依赖版本。编译目标为 ES2022，模块解析采用 NodeNext。源码 import 保留 `.js` 扩展名，这是 TypeScript 编译后 Node.js ESM 的运行路径。
 
 ```powershell
 npm run simulate
@@ -37,13 +48,21 @@ npm test
 
 ## 结构与调用
 
-- `src/data/town.js`：固定的 4 位居民、3 个职业、3 种商品及配方。
-- `src/simulation/world.js`：独立世界状态、小时推进、午夜结算与快照，无终端或引擎依赖。
-- `src/simulate.js`：原有批量模拟入口（无空间移动，保持第一阶段行为）。
-- `test/world.test.js`：时间边界、产业短缺、资金限制及长期守恒测试。
+- `src/types.ts`：世界、地图、角色、日报、行动与界面状态的共享类型。
+- `src/data/map.ts`：小镇地形、房间与房门连接。
+- `src/simulation/actors.ts`：跨空间移动、广度优先寻路、需求更新和物品消耗。
+- `src/simulation/adventure.ts`：冒险初始化、行动验证与观察视图。
+- `src/controls.ts`：菜单焦点和按键到行动的转换。
+- `src/terminal-layout.ts`：中文显示宽度与终端布局。
+- `src/cli.ts`、`src/terminal-game.ts`、`src/command-cli.ts`：模式选择和终端 I/O。
+- `src/data/town.ts`：固定的 4 位居民、3 个职业、3 种商品及配方。
+- `src/simulation/world.ts`：独立世界状态、小时推进、午夜结算与快照，无终端或引擎依赖。
+- `src/simulate.ts`：原有批量模拟入口（无空间移动，保持第一阶段行为）。
+- `test/world.test.ts`：时间边界、产业短缺、资金限制及长期守恒测试。
 
 ```js
-import { createWorld, advanceHours, snapshot } from './src/simulation/world.js';
+// 先运行 npm run build；此示例从项目根目录执行。
+import { createWorld, advanceHours, snapshot } from './dist/src/simulation/world.js';
 const world = createWorld();
 advanceHours(world, 8); // 第一天 08:00，可读取 NPC activity/location
 const reports = advanceHours(world, 16); // 午夜完成一次结算，进入第二天
@@ -67,6 +86,6 @@ const state = snapshot(world); // 独立、可序列化的数据副本
 
 ## 原型边界
 
-市场为公共库存；购买款流出模拟、工资来自外部，不是封闭经济。没有个人囤货、生产成本核算、腐败损耗、死亡、随机事件、关系、移动寻路或玩家。地点仅是逻辑标识，睡眠和休息不触发额外消费，所有物资消费统一在午夜执行。长期过剩会积累库存、价格触及下限；这是当前规则的可观察结果，还没有库存容量和生产调节。
+市场为公共库存；购买款流出模拟、工资来自外部，不是封闭经济。没有个人囤货、生产成本核算、腐败损耗、死亡、随机事件或关系系统。纯经济批量模拟不附加地图和玩家；冒险模式包含玩家及跨房门寻路。NPC 的生活物资消费统一在午夜执行，玩家可以通过交互消耗背包物资。长期过剩会积累库存、价格触及下限；这是当前规则的可观察结果，还没有库存容量和生产调节。
 
 后续优先围绕角色冒险扩展：地面物品与所有权、交互、探索风险及简单战斗；继续让这些行动通过世界状态产生实际影响。

@@ -1,5 +1,9 @@
-export function createMap() {
-  const map = {
+import type { TownMap } from '../types.js';
+
+/** 创建独立地图：# 为障碍，. 为地板，^ 为可通行野外。
+ * 地形与地点标记分开存放，画面叠加符号不会改变底层碰撞规则。 */
+export function createMap(): TownMap {
+  const map: TownMap = {
     rows: [
       '#############',
       '#...........#',
@@ -25,6 +29,8 @@ export function createMap() {
     rooms: {},
     entrances: [],
   };
+  // 每座房屋生成独立房间。保留室外门坐标，再将住所目的地改成室内床铺，
+  // 因此 NPC 回家会寻路到床，而不是停在室外门口。
   for (const name of ['你的住所', '阿林的家', '小麦的家', '阿河的家', '阿秋的家']) {
     const entrance = { ...map.places[name], mapId: 'town' };
     const mapId = `home:${name}`;

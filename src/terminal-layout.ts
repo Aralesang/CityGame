@@ -1,11 +1,16 @@
+import type { AdventureWorld, Controls, InventorySide } from './types.js';
+import { createControls } from './controls.js';
+
 import { observe } from './simulation/adventure.js';
 import { itemRows } from './controls.js';
 
 const activityNames = { work: '工作', sleep: '睡觉', leisure: '闲暇', rest: '休息' };
 // 当前界面只包含 ASCII、中文和框线；框线必须按一列计算。
-const charWidth = character => /[\u1100-\u115f\u2e80-\ua4cf\uac00-\ud7a3\uf900-\ufaff\ufe10-\ufe19\ufe30-\ufe6f\uff01-\uff60\uffe0-\uffe6]/u.test(character) ? 2 : 1;
-export const displayWidth = text => [...text].reduce((sum, character) => sum + charWidth(character), 0);
-export function fit(text, width) {
+const charWidth = (character: string) => /[\u1100-\u115f\u2e80-\ua4cf\uac00-\ud7a3\uf900-\ufaff\ufe10-\ufe19\ufe30-\ufe6f\uff01-\uff60\uffe0-\uffe6]/u.test(character) ? 2 : 1;
+/** 按终端显示列数计算长度，避免中文双宽字符导致边框错位。 */
+export const displayWidth = (text: string) => [...text].reduce((sum, character) => sum + charWidth(character), 0);
+/** 逐字符截断到指定显示宽度，再补空格；不会把双宽中文截成半个字符。 */
+export function fit(text: string, width: number) {
   let result = '';
   let used = 0;
   for (const character of text) {
@@ -16,7 +21,8 @@ export function fit(text, width) {
   }
   return result + ' '.repeat(Math.max(0, width - used));
 }
-function wrap(text, width) {
+/** 按显示列宽换行消息文本，每个输出片段都可直接交给面板排版。 */
+function wrap(text: string, width: number) {
   const lines = [];
   let line = '';
   let used = 0;
@@ -30,7 +36,9 @@ function wrap(text, width) {
   return lines;
 }
 
-export function layout(world, messages, columns, rows, ui = {}) {
+/** 根据当前终端尺寸构建一整帧字符串，不做 I/O，也不修改世界或 UI。
+ * 主界面左右分栏，物品菜单切换到独立布局；过小窗口仅显示尺寸提示。 */
+export function layout(world: AdventureWorld, messages: string[], columns: number, rows: number, ui: Controls = createControls()) {
   const width = Math.max(1, columns - 1); // 留一列，避免终端自动换行。
   if (width < 63 || rows < 26) {
     return ['窗口过小，请放大到至少 64 列 × 26 行。',
@@ -43,15 +51,16 @@ export function layout(world, messages, columns, rows, ui = {}) {
   const rightWidth = width - leftWidth - 1;
   const innerLeft = leftWidth - 4;
   const innerRight = rightWidth - 4;
-  const border = (size, title, start = '├', end = '┤') => {
+  const border = (size: number, title: string, start = '├', end = '┤') => {
     const label = ` ${title} `;
     return start + label + '─'.repeat(size - 2 - displayWidth(label)) + end;
   };
-  const content = (text, size) => '│ ' + fit(text, size - 4) + ' │';
+  const content = (text: string, size: number) => '│ ' + fit(text, size - 4) + ' │';
   const left = Array.from({ length: rows }, () => content('', leftWidth));
   left[0] = border(leftWidth, view.indoors ? '房屋内部' : '世界地图', '┌', '┐');
   left[1] = content(view.regionName, leftWidth);
   const mapLines = view.map.split('\n').map(row => [...row].join(' '));
+  // 地图在左栏可用区域居中，底部预留固定图例，不依赖地图实际行数写死位置。
   const top = Math.max(3, Math.floor((rows - 7 - mapLines.length) / 2));
   for (const [index, line] of mapLines.entries()) {
     const padding = Math.max(0, Math.floor((innerLeft - displayWidth(line)) / 2));
@@ -64,7 +73,7 @@ export function layout(world, messages, columns, rows, ui = {}) {
   });
   left[rows - 1] = '└' + '─'.repeat(leftWidth - 2) + '┘';
 
-  const sections = [
+  const sections: [string, string[]][] = [
     ['时间与位置', [
       `第 ${view.time.day} 天  ${String(view.time.hour).padStart(2, '0')}:00`,
       view.places.join('、') || '道路 / 野外',
@@ -91,12 +100,13 @@ export function layout(world, messages, columns, rows, ui = {}) {
       'Esc关闭界面  Q退出',
     ]],
   ];
-  const right = [];
+  const right: string[] = [];
   for (const [title, lines] of sections) {
     right.push(border(rightWidth, title, right.length ? '├' : '┌', right.length ? '┤' : '┐'));
     for (const line of lines) right.push(content(line, rightWidth));
   }
   right.push(border(rightWidth, '近期消息'));
+  // 消息使用右栏剩余行数；先换行再截取尾部，优先保留最新消息。
   const available = rows - right.length - 1;
   const logLines = messages.flatMap(message => wrap(message, innerRight)).slice(-available);
   for (let index = 0; index < available; index++) right.push(content(logLines[index] || '', rightWidth));
@@ -104,12 +114,13 @@ export function layout(world, messages, columns, rows, ui = {}) {
   return left.map((line, index) => line + ' ' + right[index]);
 }
 
-function inventoryLayout(world, messages, width, rows, ui) {
+/** 箱子/背包共用双栏面板；选中项超出可见区域时向下滚动，保证焦点始终可见。 */
+function inventoryLayout(world: AdventureWorld, messages: string[], width: number, rows: number, ui: Controls) {
   const leftWidth = Math.floor((width - 1) / 2);
   const rightWidth = width - leftWidth - 1;
   const active = ui.side;
   const bodyRows = rows - 9;
-  const panel = (side, size, title) => {
+  const panel = (side: InventorySide, size: number, title: string) => {
     const selected = ui.indices[side];
     const items = itemRows(world, side);
     const offset = Math.max(0, selected - bodyRows + 1);

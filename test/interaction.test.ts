@@ -1,3 +1,4 @@
+import type { InventorySide } from '../src/types.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createAdventure, act } from '../src/simulation/adventure.js';
@@ -8,6 +9,7 @@ function atChest() {
   const world = createAdventure();
   while (!samePosition(world.player.position, world.chest.position)) {
     const step = nextStep(world.map, world.player.position, world.chest.position);
+    assert.ok(step);
     act(world, { type: 'move', direction: step.dx === 1 ? 'e' : step.dx === -1 ? 'w' : step.dy === 1 ? 's' : 'n' });
   }
   return world;
@@ -81,6 +83,7 @@ test('跨午夜转移仍统一结算，箱子与经济保持同一库存', () =>
   act(world, { type: 'wait', hours: 23 - world.time.hour });
   handleKey(world, ui, 'z');
   const result = handleKey(world, ui, 'z');
+  assert.ok(result.reports);
   assert.equal(result.reports.length, 1);
   assert.equal(world.time.hour, 0);
   assert.equal(world.chest.items, world.market);
@@ -90,7 +93,7 @@ test('跨午夜转移仍统一结算，箱子与经济保持同一库存', () =>
 test('箱子远程转移被拒绝，物品界面在不同终端尺寸下无溢出', () => {
   const world = createAdventure(); const ui = createControls();
   assert.equal(act(world, { type: 'transfer', direction: 'deposit', good: 'bread' }).ok, false);
-  for (const menu of [null,'chest','backpack']) {
+  for (const menu of [null,'chest','backpack'] as (InventorySide | null)[]) {
     ui.menu = menu;
     for (const [columns, rows] of [[64,26],[80,30],[120,40]]) {
       const lines = layout(world, ['测试消息'], columns, rows, ui);
