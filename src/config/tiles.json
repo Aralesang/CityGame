@@ -1,0 +1,117 @@
+{
+  "#": {
+    "name": "不可通行边界",
+    "blocked": true,
+    "kind": "terrain",
+    "description": "地图或房间的不可通行边界。"
+  },
+  ".": {
+    "name": "空地",
+    "blocked": false,
+    "kind": "terrain",
+    "description": "这里是空地，没有可拾取的物品。"
+  },
+  "^": {
+    "name": "野外",
+    "blocked": false,
+    "kind": "terrain",
+    "description": "野外：可以通行。"
+  },
+  "H": {
+    "name": "房屋",
+    "kind": "door",
+    "blocked": false,
+    "description": "房门：走上去进入房屋。"
+  },
+  "C": {
+    "name": "箱子",
+    "kind": "container",
+    "blocked": false,
+    "description": "容器：可存放物品，按 F 打开后拿取或存入，每次一份。",
+    "contents": {}
+  },
+  "F": {
+    "name": "农田",
+    "kind": "building",
+    "blocked": false,
+    "description": "农田：农夫在这里种植小麦。"
+  },
+  "B": {
+    "name": "面包坊",
+    "kind": "building",
+    "blocked": false,
+    "description": "面包坊：面包师把小麦加工成面包。"
+  },
+  "W": {
+    "name": "水井",
+    "kind": "building",
+    "blocked": false,
+    "description": "水井：挑水工在这里收集饮水。"
+  },
+  "h": {
+    "name": "民居",
+    "kind": "door",
+    "blocked": false,
+    "description": "房门：走上去进入房屋。"
+  },
+  "S": {
+    "name": "路牌",
+    "kind": "sign",
+    "blocked": true,
+    "description": "路牌：可以查看文字说明。"
+  },
+  ">": {
+    "name": "道路入口",
+    "kind": "path",
+    "blocked": false,
+    "description": "道路入口：走上去前往连接的地图。"
+  },
+  "<": {
+    "name": "道路入口",
+    "kind": "path",
+    "blocked": false,
+    "description": "道路入口：走上去前往连接的地图。"
+  },
+  "T": {
+    "name": "树木",
+    "kind": "tree",
+    "blocked": true,
+    "description": "树木：茂密的树干挡住了去路，可以绕行。"
+  },
+  "b": {
+    "name": "床铺",
+    "kind": "bed",
+    "blocked": false,
+    "description": "床铺：只有自己的床可以睡觉。"
+  },
+  "D": {
+    "name": "房屋出口",
+    "kind": "exit",
+    "blocked": false,
+    "description": "房屋出口：走上去返回这间房屋所在的地图。"
+  },
+  "t": {
+    "name": "桌子",
+    "kind": "furniture",
+    "blocked": true,
+    "description": "桌子：室内家具，阻挡通行，暂不支持其他操作。"
+  },
+  "c": {
+    "name": "椅子",
+    "kind": "furniture",
+    "blocked": true,
+    "description": "椅子：室内家具，阻挡通行，暂不支持其他操作。"
+  },
+  "M": {
+    "name": "商店房屋",
+    "kind": "door",
+    "blocked": false,
+    "description": "商店房屋：走上房门进入，与在店内工作的店员交互，可选择对话或交易。"
+  },
+  "s": {
+    "name": "柜台工作位",
+    "kind": "counter",
+    "blocked": false,
+    "description": "店员在此工作时可以进行交易。"
+  }
+}

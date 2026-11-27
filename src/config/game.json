@@ -1,0 +1,104 @@
+{
+  "startTime": {
+    "day": 1,
+    "hour": 0
+  },
+  "startAdvanceHours": 7,
+  "hoursPerDay": 24,
+  "sleepStart": 22,
+  "sleepEnd": 6,
+  "wakeHour": 6,
+  "needMin": 0,
+  "needMax": 100,
+  "awakeNeedChange": {
+    "hunger": -2,
+    "thirst": -3,
+    "fatigue": 3
+  },
+  "sleepNeedChange": {
+    "hunger": -2,
+    "thirst": -3,
+    "fatigue": -8
+  },
+  "maxWaitHours": 168,
+  "historyLimit": 100,
+  "nearbyDistance": 2,
+  "player": {
+    "id": "player",
+    "name": "旅人",
+    "home": {
+      "mapId": "town",
+      "x": 3,
+      "y": 4
+    },
+    "facing": "self",
+    "inventory": {
+      "bread": 2,
+      "water": 3
+    },
+    "needs": {
+      "hunger": 100,
+      "thirst": 100,
+      "fatigue": 0
+    },
+    "activity": "leisure",
+    "money": 60,
+    "health": 100,
+    "maxHealth": 100,
+    "alive": true,
+    "maxCarryWeight": 20
+  },
+  "groundItems": [
+    {
+      "id": "starter-bread",
+      "good": "bread",
+      "quantity": 1,
+      "position": {
+        "x": 1,
+        "y": 4,
+        "mapId": "home:你的住所"
+      }
+    },
+    {
+      "id": "forest-water",
+      "good": "water",
+      "quantity": 2,
+      "position": {
+        "mapId": "forest",
+        "x": 3,
+        "y": 4
+      }
+    }
+  ],
+  "symbols": {
+    "player": "@",
+    "npc": "N",
+    "item": "!"
+  },
+  "activityNames": {
+    "work": "工作",
+    "sleep": "睡觉",
+    "leisure": "闲暇",
+    "rest": "休息",
+    "shopping": "采购",
+    "dead": "死亡",
+    "selling": "售货",
+    "hauling": "搬运"
+  },
+  "summaryGoods": [
+    "bread",
+    "water"
+  ],
+  "openingMessage": "WASD 移动，方向键转身，M 查看文字地图。默认行动模式，T 可开启自动运转。小镇东侧 (24,8) 的道路通往森林。",
+  "survival": {
+    "starvationDamage": 5,
+    "dehydrationDamage": 8,
+    "consumeBelow": 75,
+    "buyBelow": 65,
+    "purchaseTarget": 3
+  },
+  "clock": {
+    "automatic": false,
+    "intervalMs": 2000
+  }
+}

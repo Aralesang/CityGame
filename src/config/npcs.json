@@ -1,0 +1,283 @@
+[
+  {
+    "id": "lin",
+    "name": "阿林",
+    "job": "farmer",
+    "personality": "勤劳",
+    "workStart": 7,
+    "workEnd": 12,
+    "home": {
+      "mapId": "town",
+      "x": 8,
+      "y": 3
+    },
+    "money": 60,
+    "needs": {
+      "hunger": 100,
+      "thirst": 100,
+      "fatigue": 0
+    },
+    "greeting": "你好，旅人！勤快些，总能让日子越过越好。",
+    "health": 100,
+    "maxHealth": 100,
+    "alive": true,
+    "inventory": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "carryTarget": {
+      "bread": 3,
+      "water": 4,
+      "wheat": 12
+    },
+    "reserve": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "homeChest": {
+      "mapId": "home:阿林的家",
+      "x": 3,
+      "y": 2
+    },
+    "shop": {
+      "position": {
+        "mapId": "town",
+        "x": 8,
+        "y": 6
+      },
+      "openStart": 12,
+      "openEnd": 21,
+      "buys": [
+        "bread",
+        "water"
+      ],
+      "counter": {
+        "mapId": "shop:lin",
+        "x": 2,
+        "y": 2
+      },
+      "stockpile": {
+        "mapId": "shop:lin",
+        "x": 2,
+        "y": 1
+      },
+      "stockGoods": [
+        "wheat"
+      ]
+    },
+    "maxCarryWeight": 32
+  },
+  {
+    "id": "mai",
+    "name": "小麦",
+    "job": "baker",
+    "personality": "规律",
+    "workStart": 8,
+    "workEnd": 13,
+    "home": {
+      "mapId": "town",
+      "x": 6,
+      "y": 10
+    },
+    "money": 60,
+    "needs": {
+      "hunger": 100,
+      "thirst": 100,
+      "fatigue": 0
+    },
+    "greeting": "你好！按时吃饭、好好休息，别把自己累坏了。",
+    "health": 100,
+    "maxHealth": 100,
+    "alive": true,
+    "inventory": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 8
+    },
+    "carryTarget": {
+      "bread": 12,
+      "water": 4,
+      "wheat": 8
+    },
+    "reserve": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "homeChest": {
+      "mapId": "home:小麦的家",
+      "x": 3,
+      "y": 2
+    },
+    "shop": {
+      "position": {
+        "mapId": "town",
+        "x": 7,
+        "y": 8
+      },
+      "openStart": 13,
+      "openEnd": 21,
+      "buys": [
+        "bread",
+        "water",
+        "wheat"
+      ],
+      "counter": {
+        "mapId": "shop:mai",
+        "x": 2,
+        "y": 2
+      },
+      "stockpile": {
+        "mapId": "shop:mai",
+        "x": 2,
+        "y": 1
+      },
+      "stockGoods": [
+        "bread"
+      ]
+    },
+    "maxCarryWeight": 32
+  },
+  {
+    "id": "he",
+    "name": "阿河",
+    "job": "waterCarrier",
+    "personality": "悠闲",
+    "workStart": 7,
+    "workEnd": 12,
+    "home": {
+      "mapId": "town",
+      "x": 17,
+      "y": 10
+    },
+    "money": 60,
+    "needs": {
+      "hunger": 100,
+      "thirst": 100,
+      "fatigue": 0
+    },
+    "greeting": "嗨，旅人。慢慢逛吧，渴了记得喝水。",
+    "health": 100,
+    "maxHealth": 100,
+    "alive": true,
+    "inventory": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "carryTarget": {
+      "bread": 3,
+      "water": 20,
+      "wheat": 0
+    },
+    "reserve": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "homeChest": {
+      "mapId": "home:阿河的家",
+      "x": 3,
+      "y": 2
+    },
+    "shop": {
+      "position": {
+        "mapId": "town",
+        "x": 19,
+        "y": 9
+      },
+      "openStart": 12,
+      "openEnd": 21,
+      "buys": [
+        "bread",
+        "water"
+      ],
+      "counter": {
+        "mapId": "shop:he",
+        "x": 2,
+        "y": 2
+      },
+      "stockpile": {
+        "mapId": "shop:he",
+        "x": 2,
+        "y": 1
+      },
+      "stockGoods": [
+        "water"
+      ]
+    },
+    "maxCarryWeight": 32
+  },
+  {
+    "id": "qiu",
+    "name": "阿秋",
+    "job": "farmer",
+    "personality": "规律",
+    "workStart": 8,
+    "workEnd": 15,
+    "home": {
+      "mapId": "town",
+      "x": 12,
+      "y": 3
+    },
+    "money": 60,
+    "needs": {
+      "hunger": 100,
+      "thirst": 100,
+      "fatigue": 0
+    },
+    "greeting": "你好，今天在小镇过得怎么样？",
+    "health": 100,
+    "maxHealth": 100,
+    "alive": true,
+    "inventory": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "carryTarget": {
+      "bread": 3,
+      "water": 4,
+      "wheat": 12
+    },
+    "reserve": {
+      "bread": 2,
+      "water": 3,
+      "wheat": 0
+    },
+    "homeChest": {
+      "mapId": "home:阿秋的家",
+      "x": 3,
+      "y": 2
+    },
+    "shop": {
+      "position": {
+        "mapId": "town",
+        "x": 12,
+        "y": 6
+      },
+      "openStart": 15,
+      "openEnd": 21,
+      "buys": [
+        "bread",
+        "water"
+      ],
+      "counter": {
+        "mapId": "shop:qiu",
+        "x": 2,
+        "y": 2
+      },
+      "stockpile": {
+        "mapId": "shop:qiu",
+        "x": 2,
+        "y": 1
+      },
+      "stockGoods": [
+        "wheat"
+      ]
+    },
+    "maxCarryWeight": 32
+  }
+]

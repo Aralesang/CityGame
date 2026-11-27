@@ -1,0 +1,29 @@
+{
+  "wheat": {
+    "name": "小麦",
+    "description": "生产原料，不能直接食用；面包师每工作小时消耗 2 份小麦，生产 4 份面包。",
+    "basePrice": 12,
+    "effects": {},
+    "weight": 1
+  },
+  "bread": {
+    "name": "面包",
+    "description": "食物，每份恢复 25 点饱腹；背包中按 F 使用，耗时一小时。",
+    "basePrice": 9,
+    "effects": {
+      "hunger": 25
+    },
+    "purchaseNeed": "hunger",
+    "weight": 0.5
+  },
+  "water": {
+    "name": "饮水",
+    "description": "饮品，每份恢复 25 点水分；背包中按 F 使用，耗时一小时。",
+    "basePrice": 2,
+    "effects": {
+      "thirst": 25
+    },
+    "purchaseNeed": "thirst",
+    "weight": 1
+  }
+}

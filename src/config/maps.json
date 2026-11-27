@@ -1,0 +1,495 @@
+{
+  "defaultMapId": "town",
+  "regions": {
+    "town": {
+      "name": "小镇",
+      "indoors": false,
+      "rows": [
+        "#########################",
+        "#.......................#",
+        "#.......................#",
+        "#.......h.F.h...........#",
+        "#..H....................#",
+        "#.......................#",
+        "#.......M...M...........#",
+        "#.......................#",
+        "#......M................>",
+        "#................W.M....#",
+        "#.....hB.........h...^^^#",
+        "#....................^^^#",
+        "#....................^^^#",
+        "#....................^^^#",
+        "#########################"
+      ],
+      "overrides": {
+        "3,4": {
+          "name": "你的住所",
+          "description": "你的住所。走上房门进入。",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "home:你的住所"
+          },
+          "homeTarget": {
+            "mapId": "home:你的住所",
+            "x": 2,
+            "y": 4
+          }
+        },
+        "8,3": {
+          "name": "阿林的家",
+          "description": "阿林的住所。走上房门进入。",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "home:阿林的家"
+          },
+          "homeTarget": {
+            "mapId": "home:阿林的家",
+            "x": 2,
+            "y": 4
+          }
+        },
+        "6,10": {
+          "name": "小麦的家",
+          "description": "小麦的住所。走上房门进入。",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "home:小麦的家"
+          },
+          "homeTarget": {
+            "mapId": "home:小麦的家",
+            "x": 2,
+            "y": 4
+          }
+        },
+        "17,10": {
+          "name": "阿河的家",
+          "description": "阿河的住所。走上房门进入。",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "home:阿河的家"
+          },
+          "homeTarget": {
+            "mapId": "home:阿河的家",
+            "x": 2,
+            "y": 4
+          }
+        },
+        "12,3": {
+          "name": "阿秋的家",
+          "description": "阿秋的住所。走上房门进入。",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "home:阿秋的家"
+          },
+          "homeTarget": {
+            "mapId": "home:阿秋的家",
+            "x": 2,
+            "y": 4
+          }
+        },
+        "24,8": {
+          "name": "通往镇外森林",
+          "description": "通往镇外森林的道路，走上去进入森林。",
+          "destination": {
+            "mapId": "forest",
+            "x": 1,
+            "y": 4
+          }
+        },
+        "8,6": {
+          "name": "阿林的店铺",
+          "shopOwner": "lin",
+          "destination": {
+            "mapId": "shop:lin",
+            "x": 2,
+            "y": 3
+          }
+        },
+        "7,8": {
+          "name": "小麦的店铺",
+          "shopOwner": "mai",
+          "destination": {
+            "mapId": "shop:mai",
+            "x": 2,
+            "y": 3
+          }
+        },
+        "19,9": {
+          "name": "阿河的店铺",
+          "shopOwner": "he",
+          "destination": {
+            "mapId": "shop:he",
+            "x": 2,
+            "y": 3
+          }
+        },
+        "12,6": {
+          "name": "阿秋的店铺",
+          "shopOwner": "qiu",
+          "destination": {
+            "mapId": "shop:qiu",
+            "x": 2,
+            "y": 3
+          }
+        }
+      }
+    },
+    "forest": {
+      "name": "镇外森林",
+      "indoors": false,
+      "rows": [
+        "#############",
+        "#..T....T...#",
+        "#..T...H....#",
+        "#.....T.....#",
+        "<...ST......#",
+        "#..TT....T..#",
+        "#.......T...#",
+        "#...........#",
+        "#############"
+      ],
+      "overrides": {
+        "7,2": {
+          "name": "林间小屋",
+          "description": "林间小屋：可进入查看，离开时返回森林。",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "cabin:forest"
+          },
+          "homeTarget": {
+            "mapId": "cabin:forest",
+            "x": 2,
+            "y": 4
+          }
+        },
+        "4,4": {
+          "name": "森林路牌",
+          "description": "森林路牌：向西返回小镇，东北方有一间小屋。路牌占据此格，无法通行。"
+        },
+        "0,4": {
+          "name": "返回小镇",
+          "description": "返回小镇的道路，走上去回到小镇东侧。",
+          "destination": {
+            "mapId": "town",
+            "x": 23,
+            "y": 8
+          }
+        }
+      }
+    },
+    "home:你的住所": {
+      "name": "你的住所",
+      "indoors": true,
+      "rows": [
+        "#######",
+        "#C..t.#",
+        "#..C..#",
+        "#..c..#",
+        "#.b...#",
+        "###D###"
+      ],
+      "overrides": {
+        "2,4": {
+          "name": "你的床铺",
+          "description": "你的床铺：站到床上按 F 睡到下一次早晨{wakeHour}点，睡眠期间世界同步推进。"
+        },
+        "3,5": {
+          "name": "离开你的住所",
+          "destination": {
+            "x": 3,
+            "y": 4,
+            "mapId": "town"
+          }
+        },
+        "3,2": {
+          "name": "你的箱子",
+          "ownerId": "player",
+          "contents": {}
+        }
+      }
+    },
+    "home:阿林的家": {
+      "name": "阿林的家",
+      "indoors": true,
+      "rows": [
+        "#######",
+        "#...t.#",
+        "#..C..#",
+        "#..c..#",
+        "#.b...#",
+        "###D###"
+      ],
+      "overrides": {
+        "2,4": {
+          "name": "阿林的家床铺",
+          "description": "居民的床铺：属于其他居民，不能在这里睡觉。"
+        },
+        "3,5": {
+          "name": "离开阿林的家",
+          "destination": {
+            "x": 8,
+            "y": 3,
+            "mapId": "town"
+          }
+        },
+        "3,2": {
+          "name": "阿林的箱子",
+          "ownerId": "lin",
+          "contents": {
+            "bread": 3,
+            "water": 4,
+            "wheat": 12
+          }
+        }
+      }
+    },
+    "home:小麦的家": {
+      "name": "小麦的家",
+      "indoors": true,
+      "rows": [
+        "#######",
+        "#...t.#",
+        "#..C..#",
+        "#..c..#",
+        "#.b...#",
+        "###D###"
+      ],
+      "overrides": {
+        "2,4": {
+          "name": "小麦的家床铺",
+          "description": "居民的床铺：属于其他居民，不能在这里睡觉。"
+        },
+        "3,5": {
+          "name": "离开小麦的家",
+          "destination": {
+            "x": 6,
+            "y": 10,
+            "mapId": "town"
+          }
+        },
+        "3,2": {
+          "name": "小麦的箱子",
+          "ownerId": "mai",
+          "contents": {
+            "bread": 16,
+            "water": 4,
+            "wheat": 12
+          }
+        }
+      }
+    },
+    "home:阿河的家": {
+      "name": "阿河的家",
+      "indoors": true,
+      "rows": [
+        "#######",
+        "#...t.#",
+        "#..C..#",
+        "#..c..#",
+        "#.b...#",
+        "###D###"
+      ],
+      "overrides": {
+        "2,4": {
+          "name": "阿河的家床铺",
+          "description": "居民的床铺：属于其他居民，不能在这里睡觉。"
+        },
+        "3,5": {
+          "name": "离开阿河的家",
+          "destination": {
+            "x": 17,
+            "y": 10,
+            "mapId": "town"
+          }
+        },
+        "3,2": {
+          "name": "阿河的箱子",
+          "ownerId": "he",
+          "contents": {
+            "bread": 3,
+            "water": 30
+          }
+        }
+      }
+    },
+    "home:阿秋的家": {
+      "name": "阿秋的家",
+      "indoors": true,
+      "rows": [
+        "#######",
+        "#...t.#",
+        "#..C..#",
+        "#..c..#",
+        "#.b...#",
+        "###D###"
+      ],
+      "overrides": {
+        "2,4": {
+          "name": "阿秋的家床铺",
+          "description": "居民的床铺：属于其他居民，不能在这里睡觉。"
+        },
+        "3,5": {
+          "name": "离开阿秋的家",
+          "destination": {
+            "x": 12,
+            "y": 3,
+            "mapId": "town"
+          }
+        },
+        "3,2": {
+          "name": "阿秋的箱子",
+          "ownerId": "qiu",
+          "contents": {
+            "bread": 3,
+            "water": 4,
+            "wheat": 12
+          }
+        }
+      }
+    },
+    "cabin:forest": {
+      "name": "林间小屋",
+      "indoors": true,
+      "rows": [
+        "#######",
+        "#...t.#",
+        "#.....#",
+        "#..c..#",
+        "#.b...#",
+        "###D###"
+      ],
+      "overrides": {
+        "2,4": {
+          "name": "林间小屋床铺",
+          "description": "居民的床铺：属于其他居民，不能在这里睡觉。"
+        },
+        "3,5": {
+          "name": "离开林间小屋",
+          "destination": {
+            "mapId": "forest",
+            "x": 7,
+            "y": 2
+          }
+        }
+      }
+    },
+    "shop:lin": {
+      "name": "阿林的商店",
+      "indoors": true,
+      "rows": [
+        "#####",
+        "#.C.#",
+        "#.s.#",
+        "#...#",
+        "##D##"
+      ],
+      "overrides": {
+        "2,1": {
+          "name": "阿林的货箱",
+          "ownerId": "lin",
+          "contents": {
+            "wheat": 8
+          }
+        },
+        "2,4": {
+          "name": "返回小镇",
+          "destination": {
+            "mapId": "town",
+            "x": 8,
+            "y": 6
+          }
+        }
+      }
+    },
+    "shop:mai": {
+      "name": "小麦的商店",
+      "indoors": true,
+      "rows": [
+        "#####",
+        "#.C.#",
+        "#.s.#",
+        "#...#",
+        "##D##"
+      ],
+      "overrides": {
+        "2,1": {
+          "name": "小麦的货箱",
+          "ownerId": "mai",
+          "contents": {
+            "bread": 10
+          }
+        },
+        "2,4": {
+          "name": "返回小镇",
+          "destination": {
+            "mapId": "town",
+            "x": 7,
+            "y": 8
+          }
+        }
+      }
+    },
+    "shop:he": {
+      "name": "阿河的商店",
+      "indoors": true,
+      "rows": [
+        "#####",
+        "#.C.#",
+        "#.s.#",
+        "#...#",
+        "##D##"
+      ],
+      "overrides": {
+        "2,1": {
+          "name": "阿河的货箱",
+          "ownerId": "he",
+          "contents": {
+            "water": 17
+          }
+        },
+        "2,4": {
+          "name": "返回小镇",
+          "destination": {
+            "mapId": "town",
+            "x": 19,
+            "y": 9
+          }
+        }
+      }
+    },
+    "shop:qiu": {
+      "name": "阿秋的商店",
+      "indoors": true,
+      "rows": [
+        "#####",
+        "#.C.#",
+        "#.s.#",
+        "#...#",
+        "##D##"
+      ],
+      "overrides": {
+        "2,1": {
+          "name": "阿秋的货箱",
+          "ownerId": "qiu",
+          "contents": {
+            "wheat": 8
+          }
+        },
+        "2,4": {
+          "name": "返回小镇",
+          "destination": {
+            "mapId": "town",
+            "x": 12,
+            "y": 6
+          }
+        }
+      }
+    }
+  }
+}

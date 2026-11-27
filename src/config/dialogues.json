@@ -1,0 +1,12 @@
+{
+  "defaultGreeting": "你好，很高兴见到你。",
+  "introduction": "我是{name}，在镇上做{job}。",
+  "thirsty": "我现在很渴，得先回家休息。",
+  "hungry": "我有些饿了，得先回家休息。",
+  "working": "我正在去{workplace}工作，今天也要做好{job}的活。",
+  "sleeping": "已经是休息时间了，我准备回床上睡觉。",
+  "leisure": "现在没在上班，正好有空聊两句。",
+  "selling": "我正在柜台工作，可以和你聊聊，也可以办理交易。",
+  "hauling": "我正在搬运货物，要把物资放进箱子里。",
+  "shopping": "我正在采购需要的物资。"
+}

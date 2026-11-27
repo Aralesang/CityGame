@@ -1,0 +1,43 @@
+{
+  "farmer": {
+    "name": "农夫",
+    "workplace": {
+      "mapId": "town",
+      "x": 10,
+      "y": 3
+    },
+    "inputs": {},
+    "outputs": {
+      "wheat": 2
+    },
+    "stockTarget": 64
+  },
+  "waterCarrier": {
+    "name": "挑水工",
+    "workplace": {
+      "mapId": "town",
+      "x": 17,
+      "y": 9
+    },
+    "inputs": {},
+    "outputs": {
+      "water": 6
+    },
+    "stockTarget": 64
+  },
+  "baker": {
+    "name": "面包师",
+    "workplace": {
+      "mapId": "town",
+      "x": 7,
+      "y": 10
+    },
+    "inputs": {
+      "wheat": 2
+    },
+    "outputs": {
+      "bread": 4
+    },
+    "stockTarget": 48
+  }
+}
